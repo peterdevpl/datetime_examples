@@ -12,11 +12,12 @@ class MonthPeriodTest extends TestCase
      */
     public function testMonth(string $today, string $expectedStartDay, string $expectedEndDay)
     {
-        $now = new \DateTimeImmutable($today);
+        $utc = new \DateTimeZone('UTC');
+        $now = new \DateTimeImmutable($today, $utc);
         $period = new MonthPeriod($now);
 
-        $expectedStart = new \DateTimeImmutable($expectedStartDay);
-        $expectedEnd = new \DateTimeImmutable($expectedEndDay);
+        $expectedStart = new \DateTimeImmutable($expectedStartDay, $utc);
+        $expectedEnd = new \DateTimeImmutable($expectedEndDay, $utc);
         $this->assertEquals($expectedStart, $period->getStart());
         $this->assertEquals($expectedEnd, $period->getEnd());
     }

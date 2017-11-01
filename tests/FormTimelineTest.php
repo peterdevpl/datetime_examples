@@ -9,7 +9,7 @@ class FormTimelineTest extends TestCase
 {
     public function testIsActive()
     {
-        $now = new \DateTimeImmutable('2017-05-01 00:00:00');
+        $now = new \DateTimeImmutable('2017-05-01 00:00:00', new \DateTimeZone('UTC'));
         $opening = $now;
         $closing = $opening->add(new \DateInterval('P2M'));
 
@@ -19,7 +19,7 @@ class FormTimelineTest extends TestCase
 
     public function testIsInactive()
     {
-        $now = new \DateTimeImmutable('2017-05-01 00:00:00');
+        $now = new \DateTimeImmutable('2017-05-01 00:00:00', new \DateTimeZone('UTC'));
         $opening = $now->add(new \DateInterval('P1D'));
         $closing = $opening->add(new \DateInterval('P2M'));
 
@@ -29,7 +29,7 @@ class FormTimelineTest extends TestCase
 
     public function testEarlyBird()
     {
-        $now = new \DateTimeImmutable('2017-05-01 00:00:00');
+        $now = new \DateTimeImmutable('2017-05-01 00:00:00', new \DateTimeZone('UTC'));
         $opening = $now;
         $earlyBird = $opening->add(new \DateInterval('P7D'));
         $closing = $opening->add(new \DateInterval('P2M'));
@@ -40,7 +40,7 @@ class FormTimelineTest extends TestCase
 
     public function testNotAnEarlyBird()
     {
-        $opening = new \DateTimeImmutable('2017-05-01 00:00:00');
+        $opening = new \DateTimeImmutable('2017-05-01 00:00:00', new \DateTimeZone('UTC'));
         $earlyBird = $opening->add(new \DateInterval('P7D'));
         $now = $earlyBird->add(new \DateInterval('PT1S'));
         $closing = $opening->add(new \DateInterval('P2M'));
@@ -54,7 +54,7 @@ class FormTimelineTest extends TestCase
      */
     public function testInvalidOpeningDates()
     {
-        $now = new \DateTimeImmutable('2017-05-01 00:00:00');
+        $now = new \DateTimeImmutable('2017-05-01 00:00:00', new \DateTimeZone('UTC'));
         $opening = $now;
         $closing = $opening->sub(new \DateInterval('PT1S'));
 
@@ -67,10 +67,11 @@ class FormTimelineTest extends TestCase
      */
     public function testInvalidEarlyBirdDates(string $date)
     {
-        $now = new \DateTimeImmutable('2017-05-01 00:00:00');
+        $utc = new \DateTimeZone('UTC');
+        $now = new \DateTimeImmutable('2017-05-01 00:00:00', $utc);
         $opening = $now;
         $closing = $opening->add(new \DateInterval('P2M'));
-        $earlyBird = new \DateTimeImmutable($date);
+        $earlyBird = new \DateTimeImmutable($date, $utc);
 
         new FormTimeline($now, $opening, $closing, $earlyBird);
     }
